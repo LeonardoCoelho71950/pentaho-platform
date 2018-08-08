@@ -5,11 +5,11 @@
   <parent>
     <groupId>pentaho</groupId>
     <artifactId>pentaho-platform-ce-parent</artifactId>
-    <version>8.1.0.0-SNAPSHOT</version>
+    <version>8.1.0.4-533</version>
   </parent>
   <groupId>pentaho</groupId>
   <artifactId>pentaho-platform-extensions</artifactId>
-  <version>8.1.0.0-SNAPSHOT</version>
+  <version>8.1.0.4-533</version>
   <properties>
     <asm-attrs.version>2.2.3</asm-attrs.version>
     <license.header.file>${basedir}/../license/templates/LGPL-2.1.txt</license.header.file>
@@ -22,16 +22,16 @@
     <hamcrest-library.version>1.3</hamcrest-library.version>
     <jaxen.version>1.1.1</jaxen.version>
     <tika-parser.version>1.12</tika-parser.version>
-    <commons-xul.version>8.1.0.0-SNAPSHOT</commons-xul.version>
-    <pdi.version>8.1.0.0-SNAPSHOT</pdi.version>
-    <pentaho-reporting.version>8.1.0.0-SNAPSHOT</pentaho-reporting.version>
-    <pdi-dataservice-client-plugin.version>8.1.0.0-SNAPSHOT</pdi-dataservice-client-plugin.version>
-    <pentaho-connections.version>8.1.0.0-SNAPSHOT</pentaho-connections.version>
-    <pentaho-versionchecker.version>8.1.0.0-SNAPSHOT</pentaho-versionchecker.version>
-    <pentaho-report-wizard-core.version>8.1.0.0-SNAPSHOT</pentaho-report-wizard-core.version>
-    <pentaho-actionsequence-dom.version>8.1.0.0-SNAPSHOT</pentaho-actionsequence-dom.version>
-    <pentaho-metadata.version>8.1.0.0-SNAPSHOT</pentaho-metadata.version>
-    <pentaho-chartbeans.version>8.1.0.0-SNAPSHOT</pentaho-chartbeans.version>
+    <commons-xul.version>8.1.0.4-533</commons-xul.version>
+    <pdi.version>8.1.0.4-533</pdi.version>
+    <pentaho-reporting.version>8.1.0.4-533</pentaho-reporting.version>
+    <pdi-dataservice-client-plugin.version>8.1.0.4-533</pdi-dataservice-client-plugin.version>
+    <pentaho-connections.version>8.1.0.4-533</pentaho-connections.version>
+    <pentaho-versionchecker.version>8.1.0.4-533</pentaho-versionchecker.version>
+    <pentaho-report-wizard-core.version>8.1.0.4-533</pentaho-report-wizard-core.version>
+    <pentaho-actionsequence-dom.version>8.1.0.4-533</pentaho-actionsequence-dom.version>
+    <pentaho-metadata.version>8.1.0.4-533</pentaho-metadata.version>
+    <pentaho-chartbeans.version>8.1.0.4-533</pentaho-chartbeans.version>
   </properties>
   <dependencies>
     <dependency>
