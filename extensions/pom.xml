@@ -185,20 +185,12 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4j-api.version}</version>
-      <scope>compile</scope>
     </dependency>
+    <!-- Only needed for runtime testing -->
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-log4j12</artifactId>
-      <version>${slf4j-log4j12.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>jcl-over-slf4j</artifactId>
-      <version>${jcl-over-slf4j.version}</version>
-      <scope>compile</scope>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.xmlgraphics</groupId>
@@ -238,8 +230,15 @@
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
       <artifactId>spring-beans</artifactId>
-      <version>${spring.framework.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -251,7 +250,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>${spring.framework.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -263,7 +261,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
-      <version>${spring.framework.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -275,7 +272,6 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>se-jcr</artifactId>
-      <version>${se-jcr.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -429,7 +425,6 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core</artifactId>
-      <version>${spring-security.version}</version> <!-- see maven-parent-pom -->
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -441,7 +436,6 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-web</artifactId>
-      <version>${spring-security.version}</version>  <!-- see maven-parent-pom -->
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -453,12 +447,10 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-config</artifactId>
-      <version>${spring-security.version}</version>  <!-- see maven-parent-pom -->
     </dependency>
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-ldap</artifactId>
-      <version>${spring-security.version}</version>  <!-- see maven-parent-pom -->
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -470,7 +462,6 @@
     <dependency>
       <groupId>org.springframework.ldap</groupId>
       <artifactId>spring-ldap-core</artifactId>
-      <version>${spring-ldap-core.version}</version>
       <scope>compile</scope>
       <exclusions>
         <exclusion>
@@ -2146,12 +2137,6 @@
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>pentaho</groupId>
-      <artifactId>pentaho-platform-build-utils</artifactId>
-      <version>${project.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>annogen</groupId>
       <artifactId>annogen</artifactId>
       <version>${annogen.version}</version>
@@ -2208,66 +2193,25 @@
     <dependency>
       <groupId>org.apache.karaf</groupId>
       <artifactId>org.apache.karaf.main</artifactId>
-      <version>${org.apache.karaf.main.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.karaf.jaas</groupId>
       <artifactId>org.apache.karaf.jaas.boot</artifactId>
-      <version>${org.apache.karaf.jaas.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
       <groupId>org.apache.karaf.jaas</groupId>
       <artifactId>org.apache.karaf.jaas.modules</artifactId>
-      <version>${org.apache.karaf.jaas.version}</version>
       <scope>compile</scope>
     </dependency>
     <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.proxy</artifactId>
-      <version>${org.apache.felix.http.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.main</artifactId>
-      <version>${org.apache.felix.main.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.http.base</artifactId>
-      <version>${org.apache.felix.http.version}</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.felix</groupId>
-      <artifactId>org.apache.felix.utils</artifactId>
-      <version>${org.apache.felix.utils.version}</version>
-      <scope>compile</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>org.osgi.core</artifactId>
-          <groupId>org.osgi</groupId>
-        </exclusion>
-        <exclusion>
-          <artifactId>org.osgi.compendium</artifactId>
-          <groupId>org.osgi</groupId>
-        </exclusion>
-      </exclusions>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
     </dependency>
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.compendium</artifactId>
-      <version>${org.osgi.compendium.version}</version>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <artifactId>*</artifactId>
-          <groupId>*</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.dumbster</groupId>
@@ -2406,7 +2350,6 @@
     <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-core-tests</artifactId>
-      <version>${spring-security-core-tests.version}</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -2802,13 +2745,11 @@
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-test</artifactId>
-      <version>${spring.framework.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-web</artifactId>
-      <version>${spring.framework.version}</version>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey.contribs</groupId>
@@ -2880,17 +2821,6 @@
       <artifactId>pentaho-vfs</artifactId>
       <version>${pentaho-vfs.version}</version>
       <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework.webflow</groupId>
-      <artifactId>spring-binding</artifactId>
-      <version>${spring-binding.version}</version>
-      <exclusions>
-        <exclusion>
-          <artifactId>ognl</artifactId>
-          <groupId>opensymphony</groupId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>

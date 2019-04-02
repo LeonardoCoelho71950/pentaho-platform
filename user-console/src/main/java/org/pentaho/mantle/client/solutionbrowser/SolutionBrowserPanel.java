@@ -14,16 +14,18 @@
  * See the GNU Lesser General Public License for more details.
  *
  *
- * Copyright (c) 2002-2018 Hitachi Vantara. All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara. All rights reserved.
  *
  */
 
 package org.pentaho.mantle.client.solutionbrowser;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.pentaho.gwt.widgets.client.dialogs.MessageDialogBox;
+import org.pentaho.gwt.widgets.client.dialogs.PromptDialogBox;
 import org.pentaho.gwt.widgets.client.filechooser.RepositoryFile;
 import org.pentaho.gwt.widgets.client.utils.NameUtils;
 import org.pentaho.mantle.client.EmptyRequestCallback;
@@ -77,6 +79,8 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.SplitLayoutPanel;
@@ -109,7 +113,13 @@ public class SolutionBrowserPanel extends HorizontalPanel {
   private boolean isScheduler = false;
   private PickupDragController dragController;
   private List<String> executableFileExtensions = new ArrayList<String>();
+  private static List<String> supportedFileExtensions;
   private JsArrayString filters;
+
+  {
+    supportedFileExtensions = Arrays.asList( "cda", "xaction", "kjb", "xcdf", "wcdf,"
+      + "xjpivot", "ktr", "prpt", "url", "xanalyzer", "prpti", "xdash" );
+  }
 
   private Command ToggleLocalizedNamesCommand = new Command() {
     public void execute() {
@@ -350,7 +360,26 @@ public class SolutionBrowserPanel extends HorizontalPanel {
       //CHECKSTYLE IGNORE LineLength FOR NEXT 1 LINES
       solutionNavigator.@org.pentaho.mantle.client.solutionbrowser.SolutionBrowserPanel::setDashboardsFilter(Lcom/google/gwt/core/client/JsArrayString;)(filters);
     }
+    $wnd.mantle_showPluginError = function (filename) {
+      //CHECKSTYLE IGNORE LineLength FOR NEXT 1 LINES
+      solutionNavigator.@org.pentaho.mantle.client.solutionbrowser.SolutionBrowserPanel::showPluginError(Ljava/lang/String;)(filename);
+    }
+    $wnd.mantle_isSupportedExtension = function (extension) {
+      //CHECKSTYLE IGNORE LineLength FOR NEXT 1 LINES
+      return solutionNavigator.@org.pentaho.mantle.client.solutionbrowser.SolutionBrowserPanel::isSupportedExtension(Ljava/lang/String;)(extension);
+    }
   }-*/;
+
+  public void showPluginError( String filename ) {
+    InfoDialog dialogBox =
+      new InfoDialog( Messages.getString( "error.NoPlugin" ), Messages.getString( "error.NoPluginText", filename ), true, false, true ); //$NON-NLS-1$ $NON-NLS-2$
+    dialogBox.setWidth( "350px" );
+    dialogBox.center();
+  }
+
+  public boolean isSupportedExtension( String extension ) {
+    return supportedFileExtensions.contains( extension );
+  }
 
   public void setDashboardsFilter( JsArrayString filters ) {
     this.filters = filters;
@@ -467,6 +496,10 @@ public class SolutionBrowserPanel extends HorizontalPanel {
         extension = fileNameWithPath.substring( fileNameWithPath.lastIndexOf( FILE_EXTENSION_DELIMETER ) + 1 ); //$NON-NLS-1$
       }
       if ( !executableFileExtensions.contains( extension ) ) {
+        if ( isSupportedExtension( extension ) ) {
+          showPluginError( repositoryFile.getName() );
+          return;
+        }
         url = getPath() + "api/repos/" + pathToId( fileNameWithPath ) + "/content"; //$NON-NLS-1$ //$NON-NLS-2$ 
       } else {
         ContentTypePlugin plugin = PluginOptionsHelper.getContentTypePlugin( fileNameWithPath );
@@ -793,4 +826,13 @@ public class SolutionBrowserPanel extends HorizontalPanel {
     return encodeURIComponent(URI);
   }-*/;
 
+  private class InfoDialog extends PromptDialogBox { // All of this is to get a OK button that is aligned right
+
+    public InfoDialog( String title, String message, boolean isHTML, boolean autoHide, boolean modal ) {
+      super( title, Messages.getString( "ok" ), "removeMe", autoHide, modal, isHTML ? new HTML( message ) : new Label( message ) ); //$NON-NLS-1$
+      // This relies on the fact that PromptDialogBox will right justify the buttons if and only if there is a cancel and ok button definition.
+      // We give it a dummy cancel button ("removeMe") and a real OK button to satisfy the contract, then delete the cancel from the panel (parent).
+      cancelButton.removeFromParent();
+    }
+  }
 }

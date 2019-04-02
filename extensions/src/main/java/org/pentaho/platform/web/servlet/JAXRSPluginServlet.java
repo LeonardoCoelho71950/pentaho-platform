@@ -14,7 +14,7 @@
  * See the GNU Lesser General Public License for more details.
  *
  *
- * Copyright (c) 2002-2018 Hitachi Vantara. All rights reserved.
+ * Copyright (c) 2002-2019 Hitachi Vantara. All rights reserved.
  *
  */
 
@@ -53,6 +53,9 @@ public class JAXRSPluginServlet extends SpringServlet implements ApplicationCont
 
   private static final long serialVersionUID = 457538570048660945L;
   private static final String APPLICATION_WADL = "application.wadl";
+
+  static final int UNDER_KNOWN_ERROR_RANGE = 399;
+  static final int OVER_KNOWN_ERROR_RANGE = 600;
 
   // Matches: application.wadl, application.wadl/xsd0.xsd
   // Does not match: application.wadl/.xsd, application.wadl/xsd0/xsd0.xsd, application.wadl/a.xml
@@ -113,6 +116,13 @@ public class JAXRSPluginServlet extends SpringServlet implements ApplicationCont
       }
     }
     super.service( request, response );
+
+    // JAX-RS Response return objects do not trigger the "error state" in the HttpServletResponse
+    // Forcing all HTTP Error Status into "sendError" enables the configuration of custom error
+    // pages in web.xml.
+    if ( !response.isCommitted() && response.getStatus() > UNDER_KNOWN_ERROR_RANGE && response.getStatus() < OVER_KNOWN_ERROR_RANGE ) {
+      response.sendError( response.getStatus() );
+    }
   }
 
   @Override
