@@ -310,6 +310,91 @@ public class DatabaseHelper {
     return databaseConnection;
   }
 
+  public IDatabaseConnection dataNodeToDatabaseConnection( final Serializable id, final String name,
+                                                           final DataNode rootNode, boolean decrypt ) {
+    IDatabaseConnection databaseConnection = new DatabaseConnection();
+    String databaseType = getString( rootNode, PROP_TYPE );
+    databaseConnection.setDatabaseType( databaseType != null ? databaseTypeHelper
+      .getDatabaseTypeByShortName( databaseType ) : null );
+    databaseConnection.setName( name );
+    if ( id != null ) {
+      databaseConnection.setId( id.toString() );
+    }
+    String accessType = getString( rootNode, PROP_CONTYPE );
+
+    // This is a special case with some PDI connections
+    if ( accessType != null && accessType.contains( "Native" ) ) {
+      accessType = DatabaseAccessType.NATIVE.getName();
+    } else if ( accessType != null && accessType.equals( ", " ) ) {
+      accessType = DatabaseAccessType.JNDI.getName();
+    }
+
+    databaseConnection.setAccessType( accessType != null
+      ? DatabaseAccessType.getAccessTypeByName( accessType ) : null );
+    databaseConnection.setHostname( getString( rootNode, PROP_HOST_NAME ) );
+    databaseConnection.setDatabaseName( getString( rootNode, PROP_DATABASE_NAME ) );
+    databaseConnection.setDatabasePort( getString( rootNode, PROP_PORT ) );
+    databaseConnection.setUsername( getString( rootNode, PROP_USERNAME ) );
+    String password = getString( rootNode, PROP_PASSWORD );
+    databaseConnection.setPassword( decrypt == true ? decryptPassword( password ) : password );
+    databaseConnection.setInformixServername( getString( rootNode, PROP_SERVERNAME ) );
+    databaseConnection.setDataTablespace( getString( rootNode, PROP_DATA_TBS ) );
+    databaseConnection.setIndexTablespace( getString( rootNode, PROP_INDEX_TBS ) );
+    databaseConnection.setConnectSql( getString( rootNode, PROP_CONNECT_SQL ) );
+    databaseConnection.setInitialPoolSize( getInt( rootNode, PROP_INITIAL_POOL_SIZE ) );
+    databaseConnection.setMaximumPoolSize( getInt( rootNode, PROP_MAX_POOL_SIZE ) );
+    databaseConnection.setUsingConnectionPool( getBoolean( rootNode, PROP_IS_POOLING ) );
+    databaseConnection.setForcingIdentifiersToLowerCase( getBoolean( rootNode, PROP_IS_FORCING_TO_LOWER ) );
+    databaseConnection.setForcingIdentifiersToUpperCase( getBoolean( rootNode, PROP_IS_FORCING_TO_UPPER ) );
+    databaseConnection.setQuoteAllFields( getBoolean( rootNode, PROP_IS_QUOTE_FIELDS ) );
+    databaseConnection.setUsingDoubleDecimalAsSchemaTableSeparator( getBoolean( rootNode, PROP_IS_DECIMAL_SEPERATOR ) );
+
+    // Also, load all the properties we can find...
+    DataNode attrNode = rootNode.getNode( NODE_ATTRIBUTES );
+    if ( attrNode != null ) {
+      for ( DataProperty property : attrNode.getProperties() ) {
+        String code = property.getName();
+        String attribute = property.getString();
+        databaseConnection.getAttributes()
+          .put( code, ( attribute == null || attribute.length() == 0 ) ? "" : attribute ); //$NON-NLS-1$
+      }
+    }
+
+    // Also, load any pooling params
+    attrNode = rootNode.getNode( NODE_POOLING_PROPS );
+    if ( attrNode != null ) {
+      for ( DataProperty property : attrNode.getProperties() ) {
+        String code = property.getName();
+        String attribute = property.getString();
+        databaseConnection.getConnectionPoolingProperties().put( code,
+          ( attribute == null || attribute.length() == 0 ) ? "" : attribute ); //$NON-NLS-1$
+      }
+    }
+
+    // Load extra options
+    attrNode = rootNode.getNode( NODE_EXTRA_OPTIONS );
+    if ( attrNode != null ) {
+      for ( DataProperty property : attrNode.getProperties() ) {
+        String code = property.getName();
+        String attribute = property.getString();
+        databaseConnection.getExtraOptions().put( code,
+          ( attribute == null || attribute.length() == 0 ) ? "" : attribute ); //$NON-NLS-1$
+      }
+    }
+
+    attrNode = rootNode.getNode( NODE_EXTRA_OPTIONS_ORDER );
+    if ( attrNode != null ) {
+      for ( DataProperty property : attrNode.getProperties() ) {
+        String code = property.getName();
+        String attribute = property.getString();
+        databaseConnection.getExtraOptionsOrder().put( code,
+          ( attribute == null || attribute.length() == 0 ) ? "" : attribute ); //$NON
+      }
+    }
+
+    return databaseConnection;
+  }
+
   private String setNull( String value ) {
     String response = value;
     if ( value == null ) {

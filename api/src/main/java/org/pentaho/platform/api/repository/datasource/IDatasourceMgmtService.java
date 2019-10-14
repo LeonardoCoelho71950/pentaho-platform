@@ -85,11 +85,21 @@ public interface IDatasourceMgmtService extends IPentahoInitializer {
 
   /**
    * Retrieves all JDBC datasources from the repository
+   * with decrypted passwords
    * 
    * @return databaseConnection List
    * @throws DatasourceMgmtServiceException
    */
   public List<IDatabaseConnection> getDatasources() throws DatasourceMgmtServiceException;
+
+  /**
+   * Retrieves all JDBC datasources from the repository
+   *
+   * @param decrypt Decide if passwords should be decrypted or not.
+   * @return
+   * @throws DatasourceMgmtServiceException
+   */
+  public List<IDatabaseConnection> getDatasources( boolean decrypt ) throws DatasourceMgmtServiceException;
 
   /**
    * Retrieves all JDBC datasource ids from the repository

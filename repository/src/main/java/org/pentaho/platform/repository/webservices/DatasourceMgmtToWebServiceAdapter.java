@@ -83,6 +83,19 @@ public class DatasourceMgmtToWebServiceAdapter implements IDatasourceMgmtService
   }
 
   @Override
+  public List<IDatabaseConnection> getDatasources( boolean decrypt ) {
+    List<IDatabaseConnection> databaseConnections = new ArrayList<IDatabaseConnection>();
+    for ( DatabaseConnectionDto databaseConnection : datasourceMgmtWebService.getDatasources( decrypt ) ) {
+      try {
+        databaseConnections.add( databaseConnectionAdapter.unmarshal( databaseConnection ) );
+      } catch ( Exception e ) {
+        throw new RuntimeException( e );
+      }
+    }
+    return databaseConnections;
+  }
+
+  @Override
   public String updateDatasourceByName( String name, IDatabaseConnection databaseConnection ) {
     try {
       return datasourceMgmtWebService.updateDatasourceByName( name, databaseConnectionAdapter

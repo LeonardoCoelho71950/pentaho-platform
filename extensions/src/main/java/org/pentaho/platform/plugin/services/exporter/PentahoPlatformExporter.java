@@ -170,7 +170,7 @@ public class PentahoPlatformExporter extends ZipExportProcessor {
     log.debug( "export datasources" );
     // get all connection to export
     try {
-      List<IDatabaseConnection> datasources = getDatasourceMgmtService().getDatasources();
+      List<IDatabaseConnection> datasources = getDatasourceMgmtService().getDatasources( false );
       for ( IDatabaseConnection datasource : datasources ) {
         if ( datasource instanceof DatabaseConnection ) {
           getExportManifest().addDatasource( (DatabaseConnection) datasource );

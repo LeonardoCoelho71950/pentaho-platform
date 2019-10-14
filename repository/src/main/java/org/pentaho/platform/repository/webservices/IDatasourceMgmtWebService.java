@@ -34,6 +34,8 @@ public interface IDatasourceMgmtWebService {
 
   public List<DatabaseConnectionDto> getDatasources();
 
+  public List<DatabaseConnectionDto> getDatasources( boolean decrypt );
+
   public String updateDatasourceByName( String name, DatabaseConnectionDto databaseConnection );
 
   public void deleteDatasourceById( String id );

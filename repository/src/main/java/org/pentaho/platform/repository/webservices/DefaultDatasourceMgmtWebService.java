@@ -103,6 +103,23 @@ public class DefaultDatasourceMgmtWebService implements IDatasourceMgmtWebServic
   }
 
   @Override
+  public List<DatabaseConnectionDto> getDatasources( boolean decrypt ) {
+    List<DatabaseConnectionDto> databaseConnections = new ArrayList<DatabaseConnectionDto>();
+    try {
+      for ( IDatabaseConnection databaseConnection : datasourceMgmtService.getDatasources( decrypt ) ) {
+        try {
+          databaseConnections.add( databaseConnectionAdapter.marshal( (DatabaseConnection) databaseConnection ) );
+        } catch ( Exception e ) {
+          // CHECKSTYLES IGNORE
+        }
+      }
+    } catch ( DatasourceMgmtServiceException e ) {
+      throw new RuntimeException( e );
+    }
+    return databaseConnections;
+  }
+
+  @Override
   public String updateDatasourceByName( String name, DatabaseConnectionDto databaseConnectionDto ) {
     try {
       return datasourceMgmtService.updateDatasourceByName( name, databaseConnectionAdapter

@@ -185,7 +185,7 @@ public class JcrBackedDatasourceMgmtService implements IDatasourceMgmtService {
       if ( file != null ) {
         NodeRepositoryFileData data = repository.getDataForRead( file.getId(), NodeRepositoryFileData.class );
         IDatabaseConnection databaseConnection =
-            databaseHelper.dataNodeToDatabaseConnection( file.getId(), file.getTitle(), data.getNode() );
+            databaseHelper.dataNodeToDatabaseConnection( file.getId(), file.getTitle(), data.getNode(), false );
         // IPasswordService passwordService = PentahoSystem.get(IPasswordService.class,
         // PentahoSessionHolder.getSession());
         // databaseMeta.setPassword(passwordService.decrypt(databaseMeta.getPassword()));
@@ -228,6 +228,31 @@ public class JcrBackedDatasourceMgmtService implements IDatasourceMgmtService {
     } catch ( UnifiedRepositoryException ure ) {
       throw new DatasourceMgmtServiceException( Messages.getInstance().getErrorString(
           "DatasourceMgmtService.ERROR_0004_UNABLE_TO_RETRIEVE_DATASOURCE", "", ure.getLocalizedMessage() ), ure ); //$NON-NLS-1$ //$NON-NLS-2$
+    }
+  }
+
+  public List<IDatabaseConnection> getDatasources( boolean decrypted ) throws DatasourceMgmtServiceException {
+    try {
+      List<IDatabaseConnection> datasourceList = new ArrayList<IDatabaseConnection>();
+      List<RepositoryFile> repositoryFiles = getRepositoryFiles();
+      if ( repositoryFiles != null ) {
+        for ( RepositoryFile file : repositoryFiles ) {
+          NodeRepositoryFileData data = repository.getDataForRead( file.getId(), NodeRepositoryFileData.class );
+          IDatabaseConnection databaseConnection =
+            databaseHelper.dataNodeToDatabaseConnection( file.getId(), file.getTitle(), data.getNode(), false );
+          // IPasswordService passwordService = PentahoSystem.get(IPasswordService.class,
+          // PentahoSessionHolder.getSession());
+          // databaseMeta.setPassword(passwordService.decrypt(databaseMeta.getPassword()));
+          datasourceList.add( databaseConnection );
+        }
+      }
+      return datasourceList;
+      // } catch(PasswordServiceException pse) {
+      // throw new DatasourceMgmtServiceException(Messages.getInstance()
+      //      .getErrorString("DatasourceMgmtService.ERROR_0008_UNABLE_TO_DECRYPT_PASSWORD"), pse ); //$NON-NLS-1$
+    } catch ( UnifiedRepositoryException ure ) {
+      throw new DatasourceMgmtServiceException( Messages.getInstance().getErrorString(
+        "DatasourceMgmtService.ERROR_0004_UNABLE_TO_RETRIEVE_DATASOURCE", "", ure.getLocalizedMessage() ), ure ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
